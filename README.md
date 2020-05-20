@@ -13,6 +13,8 @@ Note that, since we return all possible subsets, the backtracking portion of the
 complexity; this solution will still struggle for large inputs. I'm not aware of any methods to avoid this when we
 wish to return all possible subsets.
 
+Additionally, this implementation allows for limiting of the maximum subset length; this can significantly improve the
+runtime of the exponential complexity backtracking phase of the algorithm. 
 
 ## Refs
 - Naive and dynamic subset sum implementation in Python. Returns True/False, does not produce the actual subset. https://github.com/KatzMitch/SubsetSum/blob/master/subsetsum.py

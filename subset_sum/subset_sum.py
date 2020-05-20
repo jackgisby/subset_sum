@@ -69,7 +69,7 @@ def subset_sum_inexact(l, mass, toll=0.001):
         yield [l[0]] + subset
 
 
-def find_path(l, dp, n, mass, path=[]):
+def find_path(l, dp, n, mass, max_subset_length, path=[]):
     """
     Recursive solution for backtracking through the dynamic programming boolean matrix. All possible subsets are found
 
@@ -97,14 +97,16 @@ def find_path(l, dp, n, mass, path=[]):
 
     # can we sum up to the target value using the remaining masses? recursive call
     elif dp[n][mass]:
-        yield from find_path(l, dp, n-1, mass, path)
-        path.append(l[n-1])
+        yield from find_path(l, dp, n-1, mass, max_subset_length, path)
 
-        yield from find_path(l, dp, n-1, mass - l[n-1], path)
-        path.pop()
+        if len(path) < max_subset_length:
+            path.append(l[n-1])
+
+            yield from find_path(l, dp, n-1, mass - l[n-1], max_subset_length, path)
+            path.pop()
 
 
-def subset_sum_dp(l, mass):
+def subset_sum_dp(l, mass, max_subset_length=3):
     """
     Dynamic programming implementation of subset sum. Note that, whilst this algorithm is pseudo-polynomial, the
     backtracking algorithm for obtaining all possible subsets has exponential complexity and so remains unsuitable
@@ -115,6 +117,9 @@ def subset_sum_dp(l, mass):
     :param l: A list of masses from which to identify subsets.
 
     :param mass: The target mass of the sum of the substructures.
+
+    :param max_subset_length: The maximum length of subsets to return. Allows the recursive backtracking algorithm to
+        terminate early in many cases, significantly improving runtime.
 
     :return: Generates of lists containing the masses of valid subsets.
     """
@@ -140,7 +145,7 @@ def subset_sum_dp(l, mass):
                 dp[i+1][j] = dp[i][j]
 
     # backtrack through the matrix recursively to obtain all solutions
-    return find_path(l, dp, n, mass)
+    return find_path(l, dp, n, mass, max_subset_length)
 
 
 if __name__ == "__main__":
@@ -168,8 +173,8 @@ if __name__ == "__main__":
     print("M2 Integer")
     i = 0
     start = datetime.datetime.now()
-    for item in subset_sum_dp(l, s):
-        i += 1  # print(item)
+    for item in subset_sum_dp(l, s, max_subset_length=3):
+        i += 1
     print(datetime.datetime.now() - start)
     print(i)
     print("---")
