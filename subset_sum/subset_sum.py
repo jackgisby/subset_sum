@@ -149,25 +149,29 @@ def subset_sum_dp(l, mass, max_subset_length=3):
 
 
 if __name__ == "__main__":
-    l = [i + 1 for i in range(50)]
-    s = 60
+    l = [i + 1 for i in range(70)]
+    s = 80
+    max_subset_length=3
+    print("Running with " + str(len(l)) + " mass values and " + str(s) + " target mass and a max subset length of " + str(max_subset_length))
 
     print("M1 Integer")
     i = 0
     start = datetime.datetime.now()
-    for item in subset_sum(l, s):
-        i += 1  # print(item)
-    print(datetime.datetime.now() - start)
-    print(i)
+    for item in subset_sum_inexact(l, s):
+        if len(item) <= max_subset_length:
+            i += 1
+    print("Runtime: " + str(datetime.datetime.now() - start))
+    print("Number of subsets: " + str(i))
     print("---")
 
     print("M1 Approximate")
     i = 0
     start = datetime.datetime.now()
     for item in subset_sum_inexact(l, s):
-        i += 1  # print(item)
-    print(datetime.datetime.now() - start)
-    print(i)
+        if len(item) <= max_subset_length:
+            i += 1
+    print("Runtime: " + str(datetime.datetime.now() - start))
+    print("Number of subsets: " + str(i))
     print("---")
 
     print("M2 Integer")
@@ -175,6 +179,6 @@ if __name__ == "__main__":
     start = datetime.datetime.now()
     for item in subset_sum_dp(l, s, max_subset_length=3):
         i += 1
-    print(datetime.datetime.now() - start)
-    print(i)
+    print("Runtime: " + str(datetime.datetime.now() - start))
+    print("Number of subsets: " + str(i))
     print("---")
