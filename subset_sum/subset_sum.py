@@ -81,6 +81,9 @@ def find_path(l, dp, n, mass, max_subset_length, path=[]):
 
     :param n: The size of l.
 
+    :param max_subset_length: The maximum length of subsets to return. Allows the recursive backtracking algorithm to
+        terminate early in many cases, significantly improving runtime.
+
     :param path: List for keeping track of the current subset.
 
     :return: Generates of lists containing the masses of valid subsets.
@@ -149,8 +152,8 @@ def subset_sum_dp(l, mass, max_subset_length=3):
 
 
 if __name__ == "__main__":
-    l = [i + 1 for i in range(70)]
-    s = 80
+    l = [i + 1 for i in range(50)]
+    s = 60
     max_subset_length=3
     print("Running with " + str(len(l)) + " mass values and " + str(s) + " target mass and a max subset length of " + str(max_subset_length))
 
