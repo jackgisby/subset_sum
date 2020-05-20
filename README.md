@@ -5,7 +5,8 @@ possible sum; most implementations appear to return, at most, a single possible 
 obtain all possible subsets, which appears to perform better than more simple non-dynamic recursive implementations. 
 
 This was implemented to obtain the possible sets of masses from high-throughput MS metabolomics experiments, which 
-requires non-exact matching of subsets. We therefore first obtain subsets at integer mass level, then further refine 
+requires non-exact matching of subsets. The dp algorithm requires prior knowledge of a fixed amount of values that the
+sum can take; we therefore first obtain subsets at integer mass level, then further refine 
 these results using a non-exact version of subset sum. This also means that the variable usually named "sum" has been
 referred to as "mass" here, instead.
 
