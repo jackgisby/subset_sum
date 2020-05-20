@@ -1,6 +1,5 @@
 import datetime
 import numpy
-import multiprocessing
 
 
 def subset_sum(l, mass):
@@ -109,7 +108,9 @@ def subset_sum_dp(l, mass):
     """
     Dynamic programming implementation of subset sum. Note that, whilst this algorithm is pseudo-polynomial, the
     backtracking algorithm for obtaining all possible subsets has exponential complexity and so remains unsuitable
-    for large input values.
+    for large input values.  This does, however, tend to perform a lot better than non-dp implementations, as we're
+    no longer doing sums multiple times and we've cut down the operations performed by the exponential portion of
+    the method.
 
     :param l: A list of masses from which to identify subsets.
 
@@ -131,46 +132,6 @@ def subset_sum_dp(l, mass):
         dp[0][i+1] = False
 
     # fill in the remaining boolean matrix
-    for i in range(n):
-        for j in range(mass+1):
-            if j >= l[i]:
-                dp[i+1][j] = dp[i][j] or dp[i][j-l[i]]
-            else:
-                dp[i+1][j] = dp[i][j]
-
-    # backtrack through the matrix recursively to obtain all solutions
-    return find_path(l, dp, n, mass)
-
-
-def subset_sum_parallel(l, mass, processes=None):
-    """
-    Dynamic programming implementation of subset sum. Note that, whilst this algorithm is pseudo-polynomial, the
-    backtracking algorithm for obtaining all possible subsets has exponential complexity and so remains unsuitable
-    for large input values.
-
-    :param l: A list of masses from which to identify subsets.
-
-    :param mass: The target mass of the sum of the substructures.
-
-    :param processes: The number of processes to utilise for generating the dp table.
-
-    :return: Generates of lists containing the masses of valid subsets.
-    """
-    n = len(l)
-
-    # initialise dynamic programming array
-    dp = numpy.ndarray([n+1, mass+1], bool)
-
-    # subsets can always equal 0
-    for i in range(n+1):
-        dp[i][0] = True
-
-    # empty subsets do not have non-zero sums
-    for i in range(mass):
-        dp[0][i+1] = False
-
-    # fill in the remaining boolean matrix
-    with multiprocessing.Pool(processes=processes) as pool:
     for i in range(n):
         for j in range(mass+1):
             if j >= l[i]:
@@ -183,8 +144,8 @@ def subset_sum_parallel(l, mass, processes=None):
 
 
 if __name__ == "__main__":
-    l = [i + 1 for i in range(49)]
-    s = 75
+    l = [i + 1 for i in range(50)]
+    s = 60
 
     print("M1 Integer")
     i = 0
@@ -208,15 +169,6 @@ if __name__ == "__main__":
     i = 0
     start = datetime.datetime.now()
     for item in subset_sum_dp(l, s):
-        i += 1  # print(item)
-    print(datetime.datetime.now() - start)
-    print(i)
-    print("---")
-
-    print("M2 Parallel")
-    i = 0
-    start = datetime.datetime.now()
-    for item in subset_sum_parallel(l, s):
         i += 1  # print(item)
     print(datetime.datetime.now() - start)
     print(i)
